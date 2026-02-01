@@ -1,7 +1,3 @@
-Here’s a clean, **README-ready English version**, written in a clear, technical, GitHub-friendly style:
-
----
-
 # Protective DNS (PDNS)
 
 **Protective DNS (PDNS)** is an open-source project that provides **secure DNS resolution** and **domain filtering**, focused on improving **privacy, security, and performance**.
