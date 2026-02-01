@@ -4,7 +4,6 @@
 
 As a result of its processing pipeline, PDNS **automatically generates a blocklist (adblock / denylist)** that can be directly used by **DNS servers and firewalls**.
 
----
 
 ## Key Features
 
@@ -14,7 +13,6 @@ As a result of its processing pipeline, PDNS **automatically generates a blockli
 * Centralized protection for the entire network
 * Suitable for **home, enterprise, and on-prem / cloud environments**
 
----
 
 ## Output
 
@@ -29,7 +27,6 @@ The main output of this project is a **ready-to-use blocklist**, compatible with
 
 The blocklist can be **automatically updated** and integrated into existing security workflows.
 
----
 
 ## Compatibility
 
@@ -45,7 +42,6 @@ It supports modern secure DNS protocols:
 * **DNS-over-HTTPS (DoH)**
 * **DNS-over-TLS (DoT)**
 
----
 
 ## Public DNS Servers
 
@@ -55,7 +51,6 @@ dns2:
 dns3:
 ```
 
----
 
 ## Use Cases
 
