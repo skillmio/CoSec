@@ -31,7 +31,6 @@ A curated **DNS blocklist**, suitable for:
 
 These lists can be **automatically updated** and integrated into existing security workflows.
 
----
 
 ### IP Blocklist (ip-blist)
 
