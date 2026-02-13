@@ -1,73 +1,23 @@
-# Skillmio’s Blocklists
+# Skillmio DNS
 
-**Skillmio’s Blocklists** is an open-source collection of **DNS and IP blocklists** derived from the real-world filtering logic and threat intelligence used by **dns.skillmio.net**, our **free public DNS service**.
+**Skillmio DNS** is a **privacy-focused DNS service** used daily by **individuals and organizations** to block ads, trackers, phishing, malware, and invasive telemetry.
 
-These blocklists are designed to enhance **privacy, security, and network performance** by stopping unwanted and malicious traffic at the DNS and network layers.
+As a **byproduct** of this activity, we generate two high-quality blocklists:
 
-## What This Project Blocks
+* **`domain-blist`** – DNS domains for blocking
+* **`ip-blist`** – IPs involved in malicious or abusive activity
 
-The DNS blocklists protect against:
+These lists are derived from **real-world DNS traffic** and are continuously updated.
 
-* **Ads** (advertisements)
-* **Trackers** (user and behavior tracking)
-* **Phishing** domains
-* **Malware and suspicious domains**
-* **Invasive telemetry**
+## Quick Highlights
 
-The lists are continuously refined based on production DNS traffic and threat intelligence.
+* **Privacy-first DNS** – block ads & trackers network-wide
+* **Threat intelligence blocklists** – domain & IP lists from real usage
+* **Cross-platform** – Windows, Linux, macOS, Android, iOS, routers, firewalls
+* **Supports secure DNS** – DNS-over-HTTPS (DoH) & DNS-over-TLS (DoT)
+* **For everyone** – home, enterprise, on-prem, and cloud environments
 
-## Blocklist Groups
-
-### DNS Blocklist (dns-blist)
-
-A curated **DNS blocklist**, suitable for:
-
-* DNS resolvers
-  *(Unbound, BIND, Pi-hole, AdGuard, Technitium, etc.)*
-* Firewalls and NGFWs
-  *(OPNsense, pfSense, FortiGate, Palo Alto, etc.)*
-* Network filtering platforms
-* SIEM and security monitoring tools
-
-These lists can be **automatically updated** and integrated into existing security workflows.
-
-
-### IP Blocklist (ip-blist)
-
-The **ipblist** is used on **Skillmio’s public-facing infrastructure** to protect services from **malicious and abusive activity**, including:
-
-* Network and port scanning
-* SSH brute-force attempts
-* RDP attacks
-* Unauthorized access attempts
-
-This blocklist is intended for **firewalls, IDS/IPS, and perimeter security systems**, not DNS resolvers.
-
-## Key Features
-
-* Blocklists derived from **dns.skillmio** production data
-* Improves **user privacy** and **network security**
-* Reduces **latency** and **bandwidth usage**
-* Centralized protection at DNS and network layers
-* Suitable for **home, enterprise, on-prem, and cloud environments**
-
-
-## Compatibility
-
-Skillmio’s Blocklists can be deployed across a wide range of platforms:
-
-* Windows, Linux, macOS
-* Android and iOS
-* Routers, firewalls, and gateways
-* On-premises and cloud infrastructures
-
-Supports secure DNS transports:
-
-* **DNS-over-HTTPS (DoH)**
-* **DNS-over-TLS (DoT)**
-
-
-## Public DNS (dns.skillmio.net)
+## Public DNS
 
 ```
 DNS-over-HTTPS (DoH): dns.skillmio.net
@@ -75,10 +25,26 @@ dns1:
 dns2:
 ```
 
+## Getting Started
+
+### Pi-hole
+
+1. Add **Skillmio DNS** as a custom upstream server.
+2. Enable automatic updates for blocklists if desired.
+
+### Unbound / BIND
+
+1. Configure as a recursive resolver with **dns.skillmio.net** as upstream.
+2. Optionally, use `domain-blist` for local zone blocking.
+
+### OPNsense / pfSense / Firewalls
+
+1. Set DNS forwarding to **Skillmio DNS**.
+2. Apply `ip-blist` to firewall rules for perimeter security.
+
 ## Use Cases
 
 * Network-wide ad and tracker blocking
+* Privacy-focused DNS filtering for individuals and organizations
 * Phishing and malware protection
-* Privacy-focused DNS filtering
-* DNS enforcement for home and enterprise networks
 * Perimeter defense for public-facing services
