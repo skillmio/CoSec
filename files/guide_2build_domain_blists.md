@@ -34,9 +34,9 @@ sudo firewall-cmd --reload
 dnf install -y sqlite3
 ```
 
-### Add Skillmio’s Domains Additions
+### Add Skillmio’s Hosts
 ```Bash
-sudo sqlite3 /etc/pihole/gravity.db "INSERT INTO adlist (address, enabled, comment) VALUES ('https://raw.githubusercontent.com/skillmio/dns/master/files/domains-additions.txt', 1, 'Skillmio Domains Additions');"
+sudo sqlite3 /etc/pihole/gravity.db "INSERT INTO adlist (address, enabled, comment) VALUES ('https://raw.githubusercontent.com/skillmio/dns/master/files/hosts.txt', 1, 'Skillmio’s Hosts');"
 ```
 
 ### Add Steven Black’s Hosts
