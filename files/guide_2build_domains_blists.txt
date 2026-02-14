@@ -17,13 +17,16 @@ sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --reload
 
 
-# --- ADD BLOCKLIST TO PIHOLE ---
+# --- ADD BLOCKLISTS TO PIHOLE ---
 
-# addlist
-pihole -g --add-url https://raw.githubusercontent.com/skillmio/dns/master/domain-blist
+# requireda package
 dnf install -y sqlite3
+
+# add Skillmio’s blocklist
 sudo sqlite3 /etc/pihole/gravity.db "INSERT INTO adlist (address, enabled, comment) VALUES ('https://raw.githubusercontent.com/skillmio/dns/master/domain-blist', 1, 'Skillmio blocklist');"
 
+# add Steven Black’s Hosts
+sudo sqlite3 /etc/pihole/gravity.db "INSERT INTO adlist (address, enabled, comment) VALUES ('https://raw.githubusercontent.com/skillmio/dns/master/domain-blist', 1, 'Steven Black’s Hosts');"
 
 # update list
 pihole -g
