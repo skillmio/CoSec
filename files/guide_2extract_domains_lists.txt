@@ -1,0 +1,37 @@
+# --- INSTALL PIHOLE ON LXC ---
+
+export PIHOLE_SELINUX=true
+curl -sSL https://install.pi-hole.net | bash
+
+
+# --- POSTINSTALL ---
+
+# set password
+pihole setpassword <YourSecurePassword>
+
+# Adding your local user to the 'pihole' group¶
+sudo usermod -aG pihole $USER
+
+# Open port
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
+
+
+# --- ADD BLOCKLIST TO PIHOLE ---
+
+# addlist
+pihole -g --add-url https://raw.githubusercontent.com/skillmio/dns/master/domain-blist
+dnf install -y sqlite3
+sudo sqlite3 /etc/pihole/gravity.db "INSERT INTO adlist (address, enabled, comment) VALUES ('https://raw.githubusercontent.com/skillmio/dns/master/domain-blist', 1, 'Skillmio blocklist');"
+
+
+# update list
+pihole -g
+
+# --- DOWNLOAD AND EXECUTE SCRIPT ---
+cd /tmp/
+wget https://raw.githubusercontent.com/skillmio/dns/master/scripts/export-hosts.sh
+chmod +x export-hosts.sh
+./export-hosts.sh
+
+
