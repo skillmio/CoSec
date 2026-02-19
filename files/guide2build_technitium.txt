@@ -1,28 +1,5 @@
 
 # --- Install Technitium ---
-dnf install -y tar
-curl -sSL https://download.technitium.com/dns/install.sh | sudo bash
-
-# --- Open HTTP Mgmt ---
-
-# No IP Restriction
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5380" log prefix="COMMENT" level="info" accept'
-sudo firewall-cmd --reload
-
-# IP Restricted
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="ip addr" port protocol="tcp" port="5380" log prefix="COMMENT" level="info" accept'
-sudo firewall-cmd --reload
-
-# --- Open HTTPS Mgmt ---
-
-# No IP Restriction
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port protocol="tcp" port="53443" log prefix="COMMENT" level="info" accept'
-sudo firewall-cmd --reload
-
-# IP Restricted
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="ip addr" port protocol="tcp" port="53443" log prefix="COMMENT" level="info" accept'
-sudo firewall-cmd --reload
-
 
 # --- CERTIFICATES ---
 
@@ -33,28 +10,6 @@ sudo firewall-cmd --reload
 # Copy to other servers script
 
 
-
-# --- CONFIG ---
-
-# Settings > General
-DNS Server Domain = dns1.skillmio.net 
-Default Responsible Person = dns@skillmio.net
-Zone Transfer Allowed Networks = ip addr (dns2.skillimio.net)
-Notify Allowed Networks = ip addr (dns2.skillimio.net)
-
-# Settings > Web Service
-HTTPS Options = Enable HTTPS [x], Enable HTTP to HTTPS Redirection [x]
-TLS Certificate File Path = /etc/letsencrypt/live/skillmio.net/skillmio.net.pfx
-TLS Certificate Password = yourpassword
-
-# Settings > Optional Protocols
-Enable DNS-over-TLS = Enable DNS-over-TLS [x], Enable DNS-over-HTTPS [x]
-TLS Certificate File Path = /etc/letsencrypt/live/skillmio.net/skillmio.net.pfx
-TLS Certificate Password = yourpassword
-
-# Settings > Blocking
-Allow / Block List URLs = https://raw.githubusercontent.com/skillmio/dns/master/domain-blist
-Block List Update Interval = 4
 
 
 
