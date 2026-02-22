@@ -5,7 +5,6 @@
 0.0.0.0 ironSource.mobi
 0.0.0.0 is.com
 0.0.0.0 s.youtube.com
-0.0.0.0 redirector.googlevideo.com
 0.0.0.0 youtubei.googleapis.com
 0.0.0.0 pangleglobal.com
 0.0.0.0 tagmanager.google.com
@@ -38,3 +37,4 @@
 0.0.0.0 dai.google.com
 0.0.0.0 ssl.p.jwpcdn.com
 0.0.0.0 px.srvcs.tumblr.com
+
