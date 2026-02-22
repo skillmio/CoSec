@@ -1,6 +1,6 @@
 #!/bin/bash
 # pihole-export-clean.sh - Export Pi-hole blocked domains with exempt filtering
-# to download this script wget https://raw.githubusercontent.com/skillmio/dns/master/scripts/export-domains.sh
+# to download this script wget https://raw.githubusercontent.com/skillmio/CoSec/master/scripts/export-domains.sh
 # chmod +x exporter.sh
 
 set -e  # Exit on error
@@ -20,15 +20,15 @@ sed -i.bak 's/^/0.0.0.0 /' all_blocked_domains.txt
 
 # Step 3: Download exempt list
 echo "3. Downloading exempt list..."
-wget -O exempt.txt https://raw.githubusercontent.com/skillmio/dns/master/files/exempt.txt
+wget -O exempt.txt https://raw.githubusercontent.com/skillmio/CoSec/master/files/exempt_domains
 
 # Step 4: Filter out exempt domains
 echo "4. Excluding exempt domains..."
-grep -Fvx -f exempt.txt all_blocked_domains.txt > clean_blocked_domains.txt
+grep -Fvx -f exempt_domains all_blocked_domains.txt > clean_blocked_domains.txt
 
 # Step 5: Sort & deduplicate
 echo "5. Sorting & removing duplicates..."
-sort -u clean_blocked_domains.txt -o clean_blocked_domains.txt
+sort -u clean_blocked_domains.txt -o blocked_domains
 
 # Stats
 echo ""
@@ -39,7 +39,7 @@ echo ""
 echo "Files created:"
 echo "  all_blocked_domains.txt ($(wc -l < all_blocked_domains.txt) lines)"
 echo "  clean_blocked_domains.txt ($(wc -l < clean_blocked_domains.txt) lines) - READY FOR UPLOAD"
-echo "  exempt.txt (downloaded)"
+echo "  exempt_domains (downloaded)"
 echo "  all_blocked_domains.txt.bak (backup)"
 
 echo ""
