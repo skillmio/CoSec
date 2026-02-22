@@ -14,7 +14,7 @@ That’s enough for private + public repos.
 # ===== CONFIG =====
 $Org        = "skillmio"
 $Token      = "ghp_xxxxxxxxxxxxxxxxxxxxx"   # <-- your classic PAT
-$BackupRoot = "D:\GitHubBackup\skillmio"    # where repos will be stored
+$BackupRoot = "C:\MyDrive\Projects\Skillmio"    # where repos will be stored
 
 # ===== PREP =====
 $Headers = @{
