@@ -10,51 +10,52 @@ That’s enough for private + public repos.
 
 #>
 
-
 # ===== CONFIG =====
-$Org        = "skillmio"
-$Token      = "ghp_xxxxxxxxxxxxxxxxxxxxx"   # <-- your classic PAT
-$BackupRoot = "C:\MyDrive\Projects\Skillmio"    # where repos will be stored
+$User     = "skillmio"
+$Token    = "ghp_xxxxxxxxxxxxxxxxx"
+$RootPath = "C:\MyDrive\Projects\Skillmio\GitHubBackup"
 
-# ===== PREP =====
+# ===== TIMESTAMP =====
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
+$BackupDir = Join-Path $RootPath $timestamp
+New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+
+# ===== HEADERS =====
 $Headers = @{
-    Authorization = "token $Token"
-    "User-Agent"  = "PowerShell-Backup"
+    Authorization = "Bearer $Token"
+    Accept        = "application/vnd.github+json"
+    "User-Agent"  = "Skillmio-Backup"
 }
 
-if (!(Test-Path $BackupRoot)) {
-    New-Item -ItemType Directory -Path $BackupRoot | Out-Null
-}
-
-# ===== GET ALL REPOS (pagination) =====
+# ===== GET ALL USER REPOS (incl private) =====
 $page = 1
 $repos = @()
 
-do {
-    $url = "https://api.github.com/orgs/$Org/repos?per_page=100&page=$page"
-    $result = Invoke-RestMethod -Uri $url -Headers $Headers -Method Get
+while ($true) {
 
-    $repos += $result
+    $url = "https://api.github.com/user/repos?per_page=100&page=$page"
+
+    $result = Invoke-RestMethod -Uri $url -Headers $Headers
+
+    if (!$result -or $result.Count -eq 0) { break }
+
+    # keep only repos owned by skillmio (not collaborators)
+    $repos += $result | Where-Object { $_.owner.login -eq $User }
+
     $page++
-} while ($result.Count -gt 0)
+}
 
-Write-Host "Found $($repos.Count) repositories"
+Write-Host "Found $($repos.Count) repos"
 
-# ===== CLONE / UPDATE =====
+# ===== DOWNLOAD =====
 foreach ($repo in $repos) {
 
     $name = $repo.name
-    $cloneUrl = $repo.clone_url
-    $localPath = Join-Path $BackupRoot $name
+    $zipUrl = "https://api.github.com/repos/$User/$name/zipball"
+    $outFile = Join-Path $BackupDir "$name.zip"
 
-    if (Test-Path $localPath) {
-        Write-Host "Updating $name"
-        git -C $localPath pull --all --prune
-    }
-    else {
-        Write-Host "Cloning $name"
-        git clone $cloneUrl $localPath
-    }
+    Write-Host "Downloading $name"
+    Invoke-WebRequest -Uri $zipUrl -Headers $Headers -OutFile $outFile
 }
 
-Write-Host "Backup completed."
+Write-Host "Backup completed to $BackupDir"
