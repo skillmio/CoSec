@@ -24,7 +24,7 @@ wget -O exempt.txt https://raw.githubusercontent.com/skillmio/CoSec/master/files
 
 # Step 4: Filter out exempt domains
 echo "4. Excluding exempt domains..."
-grep -Fvx -f exempt_domains all_blocked_domains.txt > clean_blocked_domains.txt
+grep -Fvx -f exempt.txt all_blocked_domains.txt > clean_blocked_domains.txt
 
 # Step 5: Sort & deduplicate
 echo "5. Sorting & removing duplicates..."
