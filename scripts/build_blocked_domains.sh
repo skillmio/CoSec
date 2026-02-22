@@ -112,4 +112,5 @@ else
     echo "ℹ️  No changes to commit."
 fi
 
-cd /tmp
+# Cleanup
+sudo find /tmp -mindepth 1 -maxdepth 1 -type f -delete
