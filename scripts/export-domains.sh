@@ -52,4 +52,3 @@ echo "On a Linux client:"
 echo "scp $(whoami)@$(hostname -I | awk '{print $1}'):/tmp/blocked_domains.txt \$HOME/Downloads/"
 echo ""
 
-
