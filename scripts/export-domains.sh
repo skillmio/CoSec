@@ -12,11 +12,11 @@ echo "Date: $(date)"
 
 # Step 1: Export all blocked domains from gravity
 echo "1. Exporting all gravity domains..."
-sudo sqlite3 /etc/pihole/gravity.db "SELECT DISTINCT domain FROM gravity;" > all_blocked_domains.txt
+sudo sqlite3 /etc/pihole/gravity.db "SELECT DISTINCT domain FROM gravity;" > raw_blocked_domains.txt
 
 # Step 2: Add 0.0.0.0 prefix (hosts format)
 echo "2. Adding 0.0.0.0 prefix..."
-sed -i.bak 's/^/0.0.0.0 /' all_blocked_domains.txt
+sed -i.bak 's/^/0.0.0.0 /' raw_blocked_domains.txt
 
 # Step 3: Download exempt list
 echo "3. Downloading exempt list..."
@@ -24,21 +24,22 @@ wget -O exempt.txt https://raw.githubusercontent.com/skillmio/CoSec/master/files
 
 # Step 4: Filter out exempt domains
 echo "4. Excluding exempt domains..."
-grep -Fvx -f exempt.txt all_blocked_domains.txt > clean_blocked_domains.txt
+grep -Fvx -f exempt.txt raw_blocked_domains.txt > pre_blocked_domains.txt
 
 # Step 5: Sort & deduplicate
 echo "5. Sorting & removing duplicates..."
-sort -u clean_blocked_domains.txt -o blocked_domains
+sort -u pre_blocked_domains.txt -o blocked_domains.txt
 
 # Stats
 echo ""
 echo "=== RESULTS ==="
-echo "Total gravity domains: $(wc -l < all_blocked_domains.txt)"
-echo "Clean domains (after exempt filter): $(wc -l < clean_blocked_domains.txt)"
+echo "Total gravity domains: $(wc -l < raw_blocked_domains.txt)"
+echo "Clean domains (after exempt filter): $(wc -l < pre_blocked_domains.txt)"
 echo ""
 echo "Files created:"
-echo "  all_blocked_domains.txt ($(wc -l < all_blocked_domains.txt) lines)"
-echo "  clean_blocked_domains.txt ($(wc -l < clean_blocked_domains.txt) lines) - READY FOR UPLOAD"
+echo "  all_blocked_domains.txt ($(wc -l < raw_blocked_domains.txt) lines)"
+echo "  pre_blocked_domains.txt ($(wc -l < pre_blocked_domains.txt) lines)"
+echo "  blocked_domains.txt ($(wc -l < blocked_domains.txt) lines) - READY FOR UPLOAD"
 echo "  exempt_domains (downloaded)"
 echo "  all_blocked_domains.txt.bak (backup)"
 
