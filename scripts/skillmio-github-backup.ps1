@@ -12,7 +12,7 @@ That’s enough for private + public repos.
 
 # ===== CONFIG =====
 $User     = "skillmio"
-$Token    = "ghp_xxxxxxxxxxxxxxxxx"
+#$Token    = "ghp_xxxxxxxxxxxxxxxxx"
 $RootPath = "C:\MyDrive\Projects\Skillmio\GitHubBackup"
 
 # ===== TIMESTAMP =====
