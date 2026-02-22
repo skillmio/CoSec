@@ -1,6 +1,6 @@
 0.0.0.0 analytics.google.com
 0.0.0.0 redirector.googlevideo.com
-
+0.0.0.0 xvideos.com
 
 # --- avoid ---
 127.0.0.1 localhost
