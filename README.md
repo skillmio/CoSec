@@ -34,7 +34,7 @@ The `blocked_domains` list can be used in multiple contexts, such as:
 * DNS2: 196.61.76.76
   
 **Option 2: Self-managed integration**
-1. Fetch the [`blocked_domains.txt`](https://github.com/skillmio/CoSec) list.
+1. Fetch the [`blocked_domains.txt`](https://raw.githubusercontent.com/skillmio/CoSec/master/blocked_domains.txt) list.
 2. Load it into your blocking mechanism.
 3. Apply reload / restart if required.
  
@@ -81,7 +81,7 @@ The `banned_ips` list can be applied to:
 
 **Typical usage pattern:**
 
-1. Import the [`banned_ips`](https://github.com/skillmio/CoSec) list.
+1. Import the [`banned_ips`](https://raw.githubusercontent.com/skillmio/CoSec/master/banned_ips.txt) list.
 2. Apply it as deny / drop rules.
 3. Automate periodic updates.
 4. Review logs for accidental blocks.
