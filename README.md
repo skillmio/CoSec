@@ -10,7 +10,7 @@ CoSec emphasizes:
 * **Portability**: easy integration into DNS, firewall, proxy, or application layers
 
 
-## Free Full Domains blocklist
+## Free full domains blocklist
 
 A curated project to block **tracking, advertising, telemetry, and known abusive domains**.
 
@@ -64,7 +64,7 @@ This ensures:
 * Critical or legitimate domains remain accessible
 
 
-## Free Full IP blocklist
+## Free full IP blocklist
 
 A maintained list of **malicious or abusive IP addresses**, typically associated with scanning, brute-force attacks, spam, or other hostile activity.
 
