@@ -2,3 +2,4 @@
 0.0.0.0 redirector.googlevideo.com
 0.0.0.0 youtubei.googleapis.com
 0.0.0.0 s.youtube.com
+0.0.0.0 localhost.localdomain
