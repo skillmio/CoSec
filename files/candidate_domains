@@ -1,4 +1,11 @@
 
+# 2026-02-25
+0.0.0.0 pubads.g.doubleclick.net
+0.0.0.0 adeventtracker.spotify.com
+0.0.0.0 ads-fa.spotify.com
+0.0.0.0 audio-ads.spotify.com
+0.0.0.0 adclick.g.doubleclick.net
+
 # 2026-02-24
 0.0.0.0 ggpht.com
 0.0.0.0 yt3.ggpht.com
@@ -58,6 +65,7 @@
 0.0.0.0 dai.google.com
 0.0.0.0 ssl.p.jwpcdn.com
 0.0.0.0 px.srvcs.tumblr.com
+
 
 
 
