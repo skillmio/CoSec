@@ -16,6 +16,10 @@ A curated project to block **tracking, advertising, telemetry, and known abusive
 
 The list is designed to reduce noise and unwanted traffic while preserving normal functionality as much as possible.
 
+**Blocked Domains Over Time Graph**
+
+![Blocked Domains Graph](https://raw.githubusercontent.com/skillmio/CoSec/master/files/blocked_domains_graph.png)
+
 ### How to use
 
 The `blocked_domains` list can be used in multiple contexts, such as:
