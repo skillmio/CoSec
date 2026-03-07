@@ -91,7 +91,6 @@ print(f"Total blocked domains: {domain_count}")
 # ==============================
 
 today = datetime.date.today()
-# week_id = today.strftime("%Y-W%U")
 year, week, _ = today.isocalendar()
 week_id = f"{year}-W{week:02d}"
 
