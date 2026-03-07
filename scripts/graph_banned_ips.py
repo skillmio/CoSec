@@ -90,8 +90,7 @@ print(f"Total banned IPs: {ip_count}")
 # WEEK IDENTIFIER
 # ==============================
 
-# today = datetime.date.today()
-# week_id = today.strftime("%Y-W%U")
+today = datetime.date.today()
 year, week, _ = today.isocalendar()
 week_id = f"{year}-W{week:02d}"
 
