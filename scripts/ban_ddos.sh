@@ -54,6 +54,17 @@ mkdir -p "$DDOS_DIR"
 
 cd "$GIT_REPO"
 
+# ---------------------------------------------------
+# Configure Git identity (for automation commits)
+# ---------------------------------------------------
+
+git config user.name "Skillmio"
+git config user.email "skillmiocfs@gmail.com"
+
+# ---------------------------------------------------
+# Sync with remote
+# ---------------------------------------------------
+
 git pull --rebase origin "$BRANCH"
 
 touch "$DDOS_FILE"
