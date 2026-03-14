@@ -7,7 +7,7 @@ TMP_DIR="/tmp"
 REPO_DIR="$TMP_DIR/CoSec"
 FILE_TO_UPLOAD="blocked_domains.txt"
 BRANCH="main"
-BOT_COMMIT_MSG="Update blocked domains via bot-updater"
+BOT_COMMIT_MSG="Updating blocked domains"
 
 EXTERNAL_URL="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 CANDIDATE_URL="https://raw.githubusercontent.com/skillmio/CoSec/master/files/candidate_domains"
@@ -113,4 +113,11 @@ else
 fi
 
 # Cleanup
-rm -f /tmp/blocked_domains.txt
+rm -f /tmp/candidate_domains.txt
+rm -f /tmp/candidate_norm.txt
+rm -f /tmp/current_blocked_domains.txt
+rm -f /tmp/current_norm.txt
+rm -f /tmp/exempt_domains.txt
+rm -f /tmp/exempt_norm.txt
+rm -f /tmp/external_blocked_domains.txt
+rm -f /tmp/external_norm.txt
