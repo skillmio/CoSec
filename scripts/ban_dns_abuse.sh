@@ -25,8 +25,13 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting DNS abuse detection..."
 # -------------------------------
 # Capture live DNS ANY queries
 # -------------------------------
+#timeout "$CAPTURE_TIME" tcpdump -nn -l udp port 53 and 'udp[10] & 0x80 = 0' 2>/dev/null \
+#| grep -E "ANY\?|TXT\?|DNSKEY\?|RRSIG\?" >> "$TMP_RAW"
+
 timeout "$CAPTURE_TIME" tcpdump -nn -l udp port 53 and 'udp[10] & 0x80 = 0' 2>/dev/null \
-| grep -E "ANY\?|TXT\?|DNSKEY\?|RRSIG\?" >> "$TMP_RAW"
+| grep "ANY?" \
+| awk '{print $3}' \
+| cut -d. -f1-4 >> "$TMP_RAW"
 
 # -------------------------------
 # Analyze & count queries per IP
