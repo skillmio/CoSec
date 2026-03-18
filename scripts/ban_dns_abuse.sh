@@ -1,6 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------
-# Script: dns_abuse_guard.sh
+# Script: ban_dns_abuse.sh
 # Purpose: Detect DNS abuse patterns and ban IPs
 # ---------------------------------------------------
 set -e
@@ -8,8 +8,11 @@ set -e
 # -------------------------------
 # Configurable Variables
 # -------------------------------
+IFACE="eth0"
 CAPTURE_TIME=120
 BAN_THRESHOLD=5
+JAIL="sshd"
+TMP_TCPDUMP="/tmp/dns_tcpdump_raw.log"
 TMP_RAW="/tmp/dns_raw.log"
 TMP_IPS="/tmp/dns_scored_ips.txt"
 TMP_NEW="/tmp/dns_new_ips.txt"
@@ -25,54 +28,56 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting DNS abuse detection..."
 # Require root
 # -------------------------------
 if [[ "$EUID" -ne 0 ]]; then
-    echo "❌ ERROR: This script must be run as root (tcpdump requires it)"
+    echo "❌ ERROR: Must be run as root"
     exit 1
 fi
 
 # -------------------------------
-# Capture live DNS ANY queries
-# Write RAW tcpdump lines to file — do NOT pre-process here
+# Step 1: Capture raw tcpdump output to file
+# Writing directly to file avoids SIGPIPE breaking the grep pipe
+# -Z root prevents tcpdump from dropping privileges in cron
 # -------------------------------
-> "$TMP_RAW"  # truncate/create fresh
+> "$TMP_TCPDUMP"
+> "$TMP_RAW"
 
-timeout "$CAPTURE_TIME" tcpdump -i eth0 -Z root -nn -l udp port 53 and 'udp[10] & 0x80 = 0' 2>/dev/null \
-    | grep --line-buffered -E " ANY\?| TXT\?| DNSKEY\?| RRSIG\?" \
-    >> "$TMP_RAW" || true
+timeout "$CAPTURE_TIME" tcpdump -i "$IFACE" -Z root -nn -l \
+    udp port 53 and 'udp[10] & 0x80 = 0' \
+    > "$TMP_TCPDUMP" 2>/dev/null || true
 
+# -------------------------------
+# Step 2: Filter abuse query types from captured file
+# -------------------------------
+grep -E " ANY\?| TXT\?| DNSKEY\?| RRSIG\?" "$TMP_TCPDUMP" >> "$TMP_RAW" || true
 
 LINE_COUNT=$(wc -l < "$TMP_RAW")
 echo "Raw matching lines captured: $LINE_COUNT"
 
 if [[ "$LINE_COUNT" -eq 0 ]]; then
-    echo "⚠️  No DNS abuse lines captured. Check: is tcpdump seeing traffic on this interface?"
-    echo "   Test manually: tcpdump -nn -l udp port 53 and 'udp[10] & 0x80 = 0'"
+    echo "⚠️  No DNS abuse lines captured."
+    echo "   Test manually: tcpdump -i $IFACE -Z root -nn udp port 53 and 'udp[10] & 0x80 = 0'"
     exit 0
 fi
 
-# Debug: show a few sample lines
 echo "--- Sample captured lines ---"
 head -5 "$TMP_RAW"
 echo "-----------------------------"
 
 # -------------------------------
-# Analyze: extract source IP from raw tcpdump lines, count per IP
-# tcpdump line format: HH:MM:SS.us IP src.port > dst.port: query
-# Source IP is field $3, format: 1.2.3.4.PORT — strip the port
+# Extract source IPs, count per IP, apply threshold
+# tcpdump format: HH:MM:SS.us IP src.port > dst.port: query
+# Field $3 = src.port e.g. 177.54.122.14.37015 — split on "." to get IP
 # -------------------------------
 awk -v threshold="$BAN_THRESHOLD" '
 {
-    # Field $3 is src.port — extract IP by removing trailing .PORT
     split($3, parts, ".")
-    # Rebuild just the first 4 octets
     ip = parts[1] "." parts[2] "." parts[3] "." parts[4]
     if (ip ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/)
         count[ip]++
 }
 END {
-    for (i in count) {
+    for (i in count)
         if (count[i] >= threshold)
             print i
-    }
 }
 ' "$TMP_RAW" | sort -u > "$TMP_IPS"
 
@@ -101,20 +106,27 @@ git pull --rebase origin "$BRANCH"
 touch "$DDOS_FILE"
 
 # -------------------------------
-# Filter only new IPs
+# Filter only new IPs (not already in today's log)
 # -------------------------------
 grep -vxFf "$DDOS_FILE" "$TMP_IPS" > "$TMP_NEW" || true
 NEW_COUNT=$(wc -l < "$TMP_NEW")
 echo "New attacking IPs: $NEW_COUNT"
 
 # -------------------------------
-# Ban new IPs via fail2ban
+# Ban new IPs via fail2ban (sshd jail)
 # -------------------------------
 BAN_COUNT=0
 while read -r ip; do
     [ -z "$ip" ] && continue
+
+    # Skip if already banned in the jail
+    if fail2ban-client status "$JAIL" 2>/dev/null | grep -q "$ip"; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Already banned: $ip"
+        continue
+    fi
+
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Banning IP: $ip"
-    fail2ban-client set sshd banip "$ip" || true
+    fail2ban-client set "$JAIL" banip "$ip" || true
     BAN_COUNT=$((BAN_COUNT+1))
 done < "$TMP_NEW"
 
